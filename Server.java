@@ -2,6 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 public class Server extends JFrame implements ActionListener {                    //Action listner is to ada action (awr.event class). This must be overwrite in server class
+
+    JTextField text;                                               ////global declarion of text field so that it can be defined later to perform action
+    JPanel a1;                                                    //globally declaring panel to show wrtten messige on tha
+    Box vertical=Box.createVerticalBox();                         // helps to align messige one after another
+
     Server(){
         setLayout(null);
 
@@ -73,11 +78,11 @@ public class Server extends JFrame implements ActionListener {                  
         status.setFont(new Font("SAN_SERIF", Font.BOLD, 14));
         p1.add(status);
 
-        JPanel a1=new JPanel();                                          /////creating a new panel where messiges will be shown
+        a1=new JPanel();                                          /////creating a new panel where messages will be shown
         a1.setBounds(5,75,440,570);
         add(a1);
 
-        JTextField text= new JTextField();                                 /// creating textfield
+        text= new JTextField();                                 /// creating textfield
         text.setBounds(5,655,310,40);
         text.setFont(new Font("SAN_SERIF", Font.PLAIN, 14));
         add(text);
@@ -87,6 +92,7 @@ public class Server extends JFrame implements ActionListener {                  
         send.setBackground(new Color(7,94,84));
         send.setFont(new Font("SAN_SERIF", Font.BOLD, 14));
         send.setForeground(Color.WHITE);
+        send.addActionListener(this);                                      //tells action  must be performed on this (action defined below in public void actionPerformed(ActionEvent ae))
         add(send);
 
 
@@ -100,9 +106,50 @@ public class Server extends JFrame implements ActionListener {                  
 
         setVisible(true);                                             // make frame visible(by default it is not visible)
 
+       
         
+
+
+
+
     }
-    public void actionPerformed(ActionEvent ae){                      //overwriting action
+    public void actionPerformed(ActionEvent ae){                      //overwriting action  
+        String out=text.getText();                              //get text from text area
+        
+        JLabel output =new JLabel(out);                            //new label created to enter (out)string
+        JPanel p2=formatLabel(out);                                  //panel p2 is created 
+       
+
+        a1.setLayout(new BorderLayout());
+
+        JPanel right=new JPanel(new BorderLayout());     //message is aligned right side of border
+        right.add(p2,BorderLayout.LINE_END);                   //we can not direstly add out(string) but we can add panel therefore we create a label (output) above , and then we create a panel(p2)
+                                                                                     
+        vertical.add(right);            // multiple messages are  aligned vertically
+        vertical.add(Box.createVerticalStrut(15));      ///space between vertical messages
+
+        a1.add(vertical,BorderLayout.PAGE_START);         ///
+
+        repaint();
+        invalidate();
+        validate();
+
+
+    }
+
+
+    public static JPanel formatLabel(String out){
+        JPanel panel= new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+        JLabel output = new JLabel(out);
+       
+        output.setFont(new Font("Tahoma",Font.PLAIN,16));
+        output.setBackground(new Color(37,211,102));
+        output.setOpaque(true);
+
+        panel.add(output);
+        return panel;
 
     }
     public static void main(String[] args){
@@ -111,3 +158,4 @@ public class Server extends JFrame implements ActionListener {                  
     }
 
 }   
+

@@ -5,13 +5,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.text.*;
+import java.net.*;
+import java.io.*;
 
 
 public class Server extends JFrame implements ActionListener {                    //Action listner is to ada action (awr.event class). This must be overwrite in server class
 
     JTextField text;                                               ////global declarion of text field so that it can be defined later to perform action
     JPanel a1;                                                    //globally declaring panel to show wrtten messige on tha
-    Box vertical=Box.createVerticalBox();                         // helps to align messige one after another
+    static Box vertical=Box.createVerticalBox();                         // helps to align messige one after another
 
     Server(){
         setLayout(null);
@@ -164,6 +166,30 @@ public class Server extends JFrame implements ActionListener {                  
     }
     public static void main(String[] args){
         new Server();
+
+
+    try{
+        ServerSocket skt = new ServerSocket(6001);
+        while (true) {
+            Socket s= skt.accept();
+            DataInputStream din =new DataInputStream(s.getInputStream());
+            DataOutputStream dout =new DataOutputStream(s.getOutputStream());
+            while(true){
+                String msg=din.readUTF();
+                JPanel panel=formatLabel(msg);
+
+                JPanel left =  new JPanel(new BorderLayout());
+                left.add(panel,BorderLayout.LINE_START);
+                vertical.add(left);
+                validate();
+                
+
+            }
+        }
+
+    }catch(Exception e){
+        e.printStackTrace();
+    }
 
     }
 

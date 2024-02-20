@@ -1,6 +1,12 @@
 import javax.swing.*;
+import javax.swing.border.*;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
+import java.text.*;
+
+
 public class Server extends JFrame implements ActionListener {                    //Action listner is to ada action (awr.event class). This must be overwrite in server class
 
     JTextField text;                                               ////global declarion of text field so that it can be defined later to perform action
@@ -11,7 +17,7 @@ public class Server extends JFrame implements ActionListener {                  
         setLayout(null);
 
         JPanel p1=new JPanel();                                        //creating a panel
-        p1.setBackground(new Color(7,94,84));                    //set bg color of panel
+        p1.setBackground(new Color(220,20,60));                    //set bg color of panel
         p1.setBounds(0,0,450,70);                     // set the location and size of panel
         p1.setLayout(null);         // is shoub be null to run setBounds
         add(p1);                                                       // add function is used to set any component above frame
@@ -19,8 +25,8 @@ public class Server extends JFrame implements ActionListener {                  
 
 
         
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/3.png"));           //get image from file directory(icons folder)
-        Image i2 = i1.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT);      /*crating image class(awt package) to get image and scale it   */                                                                                         
+        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/3.PNG"));           //get image from file directory(icons folder)
+        Image i2 = i1.getImage().getScaledInstance(20, 30, Image.SCALE_DEFAULT);      /*crating image class(awt package) to get image and scale it   */                                                                                         
         ImageIcon i3 = new ImageIcon(i2);                              //image class cannot be directly entere in lable so we create a new imageIcon
         JLabel back = new JLabel(i3);                                   
         back.setBounds(5, 20, 25, 25);                // set location and size of image
@@ -36,7 +42,7 @@ public class Server extends JFrame implements ActionListener {                  
         });
 
 
-        ImageIcon i4 = new ImageIcon(ClassLoader.getSystemResource("icons/1.png"));                 //////adding profile pic
+        ImageIcon i4 = new ImageIcon(ClassLoader.getSystemResource("icons/IMG.jpg"));                 //////adding profile pic
         Image i5 = i4.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
         ImageIcon i6 = new ImageIcon(i5);
         JLabel profile = new JLabel(i6);
@@ -89,10 +95,10 @@ public class Server extends JFrame implements ActionListener {                  
 
         JButton send=new JButton("SEND");                            /////creating button
         send.setBounds(320,655,123,40);
-        send.setBackground(new Color(7,94,84));
+        send.setBackground(new Color(220,20,60));
         send.setFont(new Font("SAN_SERIF", Font.BOLD, 14));
         send.setForeground(Color.WHITE);
-        send.addActionListener(this);                                      //tells action  must be performed on this (action defined below in public void actionPerformed(ActionEvent ae))
+        send.addActionListener(this);                                    /////tells action  must be performed on this (action defined below in public void actionPerformed(ActionEvent ae))
         add(send);
 
 
@@ -108,9 +114,6 @@ public class Server extends JFrame implements ActionListener {                  
 
        
         
-
-
-
 
     }
     public void actionPerformed(ActionEvent ae){                      //overwriting action  
@@ -130,6 +133,9 @@ public class Server extends JFrame implements ActionListener {                  
 
         a1.add(vertical,BorderLayout.PAGE_START);         ///
 
+        text.setText(" ");                                  /// remove text once entered
+        
+
         repaint();
         invalidate();
         validate();
@@ -138,18 +144,22 @@ public class Server extends JFrame implements ActionListener {                  
     }
 
 
-    public static JPanel formatLabel(String out){
-        JPanel panel= new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+    public static JPanel formatLabel(String out){                          //editing message label
+        JPanel panel= new JPanel();                                        //new panel created 
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));           // setting layout
 
-        JLabel output = new JLabel(out);
-       
-        output.setFont(new Font("Tahoma",Font.PLAIN,16));
-        output.setBackground(new Color(37,211,102));
-        output.setOpaque(true);
+        JLabel output = new JLabel(out);                                   //creating a label
 
-        panel.add(output);
-        return panel;
+        panel.add(output);                                                   // adding message to panel
+        
+        output.setFont(new Font("Tahoma",Font.PLAIN,16));          //setting font type ,size
+        output.setBackground(new Color(255,255,102));                   //stting bg color
+        output.setOpaque(true);                                     // making box opaque
+        output.setBorder(new EmptyBorder(15,15,15,20));   //setting border for the message 
+        
+        return panel;                                                        // it is req.
+
+        
 
     }
     public static void main(String[] args){

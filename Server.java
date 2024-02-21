@@ -9,20 +9,23 @@ import java.net.*;
 import java.io.*;
 
 
-public class Server extends JFrame implements ActionListener {                    //Action listner is to ada action (awr.event class). This must be overwrite in server class
+public class Server  implements ActionListener {                    //Action listner is to ada action (awr.event class). This must be overwrite in server class
 
     JTextField text;                                               ////global declarion of text field so that it can be defined later to perform action
     JPanel a1;                                                    //globally declaring panel to show wrtten messige on tha
     static Box vertical=Box.createVerticalBox();                         // helps to align messige one after another
+    static JFrame f= new JFrame();                              //static declaration of Jframe
+    static DataOutputStream dout;                               //static declaration
+
 
     Server(){
-        setLayout(null);
+        f. setLayout(null);
 
         JPanel p1=new JPanel();                                        //creating a panel
         p1.setBackground(new Color(220,20,60));                    //set bg color of panel
         p1.setBounds(0,0,450,70);                     // set the location and size of panel
         p1.setLayout(null);         // is shoub be null to run setBounds
-        add(p1);                                                       // add function is used to set any component above frame
+        f.add(p1);                                                       // add function is used to set any component above frame
 
 
 
@@ -88,12 +91,12 @@ public class Server extends JFrame implements ActionListener {                  
 
         a1=new JPanel();                                          /////creating a new panel where messages will be shown
         a1.setBounds(5,75,440,570);
-        add(a1);
+        f.add(a1);
 
         text= new JTextField();                                 /// creating textfield
         text.setBounds(5,655,310,40);
         text.setFont(new Font("SAN_SERIF", Font.PLAIN, 14));
-        add(text);
+        f.add(text);
 
         JButton send=new JButton("SEND");                            /////creating button
         send.setBounds(320,655,123,40);
@@ -101,24 +104,25 @@ public class Server extends JFrame implements ActionListener {                  
         send.setFont(new Font("SAN_SERIF", Font.BOLD, 14));
         send.setForeground(Color.WHITE);
         send.addActionListener(this);                                    /////tells action  must be performed on this (action defined below in public void actionPerformed(ActionEvent ae))
-        add(send);
+        f.add(send);
 
 
-        setSize(450,700);                                  //set size of frame
-        setLocation(200,50);                                        // set frame location
-        setUndecorated(true);
-        getContentPane().setBackground(Color.yellow);                   //set bg color of frame
+        f.setSize(450,700);                                  //set size of frame
+        f.setLocation(200,50);                                        // set frame location
+        f.setUndecorated(true);
+        f.getContentPane().setBackground(Color.yellow);                   //set bg color of frame
 
 
 
 
-        setVisible(true);                                             // make frame visible(by default it is not visible)
+        f.setVisible(true);                                             // make frame visible(by default it is not visible)
 
        
         
 
     }
-    public void actionPerformed(ActionEvent ae){                      //overwriting action  
+    public void actionPerformed(ActionEvent ae){                      //overwriting action 
+        try{ 
         String out=text.getText();                              //get text from text area
         
         JLabel output =new JLabel(out);                            //new label created to enter (out)string
@@ -134,14 +138,20 @@ public class Server extends JFrame implements ActionListener {                  
         vertical.add(Box.createVerticalStrut(15));      ///space between vertical messages
 
         a1.add(vertical,BorderLayout.PAGE_START);         ///
+        
+        dout.writeUTF(out);
+
 
         text.setText(" ");                                  /// remove text once entered
         
 
-        repaint();
-        invalidate();
-        validate();
-
+        f.repaint();
+        f.invalidate();
+        f.validate();
+    
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -158,6 +168,15 @@ public class Server extends JFrame implements ActionListener {                  
         output.setBackground(new Color(255,255,102));                   //stting bg color
         output.setOpaque(true);                                     // making box opaque
         output.setBorder(new EmptyBorder(15,15,15,20));   //setting border for the message 
+
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        
+        JLabel time = new JLabel();
+        time.setText(sdf.format(cal.getTime()));
+        
+        panel.add(time);
         
         return panel;                                                        // it is req.
 
@@ -168,12 +187,12 @@ public class Server extends JFrame implements ActionListener {                  
         new Server();
 
 
-    try{
+    try{                                                                                   // creating server using socket
         ServerSocket skt = new ServerSocket(6001);
         while (true) {
             Socket s= skt.accept();
             DataInputStream din =new DataInputStream(s.getInputStream());
-            DataOutputStream dout =new DataOutputStream(s.getOutputStream());
+            dout =new DataOutputStream(s.getOutputStream());
             while(true){
                 String msg=din.readUTF();
                 JPanel panel=formatLabel(msg);
@@ -181,7 +200,7 @@ public class Server extends JFrame implements ActionListener {                  
                 JPanel left =  new JPanel(new BorderLayout());
                 left.add(panel,BorderLayout.LINE_START);
                 vertical.add(left);
-                validate();
+                f.validate();                       //
                 
 
             }
